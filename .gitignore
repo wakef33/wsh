@@ -1,3 +1,6 @@
+# wsh binary
+bin/*
+
 # Swap files
 *.swp
 
