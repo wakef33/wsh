@@ -45,7 +45,7 @@ int wsh_cd(char **args)
         fprintf(stderr, "wsh: expected argument to \"cd\"\n");
     } else {
         if (chdir(args[1]) != 0) {
-            perror("lsh");
+            perror("wsh");
         }
     }
     return 1;
@@ -61,7 +61,6 @@ int wsh_help(char **args)
 {
     int i;
     printf("Wake Shell WSH\n");
-    printf("Type program names and arguments, and hit enter.\n");
     printf("The following are built in:\n");
     
     for (i = 0; i < wsh_num_builtins(); i++) {
