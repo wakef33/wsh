@@ -8,4 +8,5 @@
  */
 int wsh_cd(char **args);
 int wsh_help(char **args);
+int wsh_cat(char **args);
 int wsh_exit(char **args);

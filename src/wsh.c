@@ -13,6 +13,7 @@
  */
 char *builtin_str[] = {
     "cd",
+    "cat",
     "help",
     "exit"
 };
@@ -20,6 +21,7 @@ char *builtin_str[] = {
 
 int (*builtin_func[]) (char **) = {
     &wsh_cd,
+    &wsh_cat,
     &wsh_help,
     &wsh_exit
 };
@@ -36,7 +38,7 @@ int wsh_num_builtins() {
 
 /*
  * @brief Bultin command: change directory.
- * @param args List of args.  args[0] is "cd".  args[1] is the directory.
+ * @param args List of args. args[0] is "cd". args[1] is the directory.
  * @return Always returns 1, to continue executing.
  */
 int wsh_cd(char **args)
@@ -53,8 +55,38 @@ int wsh_cd(char **args)
 
 
 /*
+ * @brief Builtin command: cat file.
+ * @param args List of args. args[0] is "cat". Additional args are filenames.
+ * @return Always returns 1, to continue executing.
+ */
+int wsh_cat(char **args)
+{
+    FILE *fp;
+    int c;
+    
+    if (args[1] == NULL) {
+        fprintf(stderr, "wsh: expected argument(s) to \"cat\"\n");
+    } else {
+        /* open file for reading */
+        fp = fopen(args[1], "r");
+        if(fp == NULL) {
+            perror("Error opening file");
+            return -1;
+        }
+        /* print char until EOF is reached */
+        while ((c = fgetc(fp)) != EOF) {
+            putchar(c);
+        }
+        /* close file */
+        fclose(fp);
+    }
+    return 1;
+}
+
+
+/*
  * @brief Builtin command: print help.
- * @param args List of args.  Not examined.
+ * @param args List of args. Not examined.
  * @return Always returns 1, to continue executing.
  */
 int wsh_help(char **args)
@@ -74,7 +106,7 @@ int wsh_help(char **args)
 
 /*
  * @brief Builtin command: exit.
- * @param args List of args.  Not examined.
+ * @param args List of args. Not examined.
  * @return Always returns 0, to terminate execution.
  */
 int wsh_exit(char **args)
